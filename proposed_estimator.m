@@ -41,8 +41,26 @@ function [alpha_hat, gamma_hat, fail] = proposed_estimator(k1, k2, m4, n, L, c_a
     end
 end
 
-function alpha_hat = poly(eta)
-    p = [-eta*210 210 105 35 0 -7 0 5];
-    r = roots(p);
-    alpha_hat = -r(1);
+function alpha_hat = poly(eta, n_terms)
+    if nargin == 1
+        n_terms = 4;
+    end
+
+    if isnan(eta)
+        alpha_hat = 0;
+    else    
+        switch n_terms
+            case 3
+                p = [6*eta -6 3 -1]; %3
+            case 4
+                p = [30*eta -30 -15 -5 0 1]; %4
+            case 5
+                p = [210*eta -210 105 -35 0 7 0 -5]; %5
+            case 6
+                p = [210*eta -210 -105 -35 0 7 0 -5 0 7]; %6
+        end
+        r = roots(p);
+        
+        alpha_hat = -r(1);
+    end
 end
